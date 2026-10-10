@@ -1,0 +1,1106 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>D&amp;D 5e Character Sheet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:wght@600;700&display=swap">
+<style>
+/* Layout: one narrow column with two views. Home is a plain list of characters; the sheet has an identity block, a sticky three-tab bar and one panel at a time. White paper, hairline borders, every control at least 44px tall. */
+:root{
+  --paper:#ffffff;
+  --ink:#1c1e23;
+  --muted:#5f636b;
+  --faint:#8a8e96;
+  --line:#c9ccd3;
+  --line-soft:#e5e7eb;
+  --accent:#23415f;
+  --danger:#b3261e;
+  --font-display:"Alegreya",Georgia,"Times New Roman",serif;
+  --font-body:system-ui,Roboto,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  padding-inline:16px;
+  padding-block:20px 48px;
+  background:var(--paper);
+  color:var(--ink);
+  font:16px/1.4 var(--font-body);
+}
+.wrap{max-width:620px;margin:0 auto}
+h1{
+  margin:0;
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:34px;
+  line-height:1.1;
+}
+h2{
+  margin:0 0 10px;
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:21px;
+  line-height:1.2;
+  text-wrap:balance;
+}
+.hint{margin:-4px 0 12px;font-size:13px;color:var(--muted)}
+.lab{display:block;margin-bottom:4px;font-size:12px;line-height:1.2;color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Text fields */
+.in{
+  display:block;
+  width:100%;
+  min-width:0;
+  height:44px;
+  padding:0 12px;
+  font:inherit;
+  font-size:16px;
+  color:var(--ink);
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:8px;
+  -webkit-appearance:none;
+  appearance:none;
+}
+.in::placeholder{color:var(--faint)}
+.in:focus{border-color:var(--accent)}
+textarea.in{
+  height:auto;
+  min-height:128px;
+  padding:10px 12px;
+  line-height:1.45;
+  resize:vertical;
+  field-sizing:content;
+}
+
+/* Home */
+.chars{margin-top:20px;border-top:1px solid var(--line-soft)}
+.char{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border-bottom:1px solid var(--line-soft);
+}
+.char .open{
+  flex:1;
+  min-width:0;
+  display:grid;
+  gap:2px;
+  min-height:68px;
+  padding:12px 0;
+  font:inherit;
+  text-align:left;
+  color:var(--ink);
+  background:none;
+  border:0;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.char .open:active .cn{color:var(--accent)}
+.cn{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:23px;
+  line-height:1.15;
+  overflow-wrap:anywhere;
+}
+.cn.none{font-weight:600;color:var(--muted)}
+.cs{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.del,.cancel,.go{
+  flex:none;
+  height:44px;
+  padding:0 14px;
+  font:inherit;
+  font-size:14px;
+  font-weight:600;
+  color:var(--muted);
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:8px;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.del:active,.cancel:active{background:var(--line-soft)}
+.char.confirm{flex-wrap:wrap;padding:14px 0}
+.char.confirm .q{flex:1 1 100%;margin:0;overflow-wrap:anywhere}
+.char.confirm .cancel,.char.confirm .go{flex:1 1 0}
+.go{color:#ffffff;background:var(--danger);border-color:var(--danger)}
+.go:active{background:var(--danger)}
+.empty{margin:20px 0 0;color:var(--muted)}
+.primary{
+  display:block;
+  width:100%;
+  min-height:52px;
+  margin-top:20px;
+  font:inherit;
+  font-size:16px;
+  font-weight:600;
+  color:#ffffff;
+  background:var(--accent);
+  border:0;
+  border-radius:8px;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.primary:active{opacity:.88}
+.two{display:flex;gap:10px;margin-top:12px}
+.secondary{
+  flex:1;
+  min-width:0;
+  min-height:48px;
+  font:inherit;
+  font-size:15px;
+  font-weight:600;
+  color:var(--accent);
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:8px;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.secondary:active{background:var(--line-soft)}
+.status{margin:14px 0 0;font-size:14px;color:var(--ink)}
+.status.bad{color:var(--danger)}
+#status-sheet{margin-bottom:12px}
+
+/* Sheet: top bar */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.link{
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  padding:0 8px;
+  font:inherit;
+  font-size:15px;
+  font-weight:600;
+  color:var(--accent);
+  background:none;
+  border:0;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.bar .link:first-child{padding-left:0}
+.bar .link:last-child{padding-right:0}
+
+/* Identity block */
+.id{display:grid;gap:14px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair.lvl{grid-template-columns:minmax(0,1fr) 92px}
+.name{
+  height:54px;
+  padding:0 0 2px;
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:30px;
+  line-height:1.1;
+  border:0;
+  border-bottom:2px solid var(--ink);
+  border-radius:0;
+}
+.name:focus{border-bottom-color:var(--accent)}
+.hp{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px}
+.hp .in{
+  height:56px;
+  font-size:24px;
+  font-weight:700;
+  text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.hp .cur{border:2px solid var(--ink)}
+.hp .cur:focus{border-color:var(--accent)}
+
+/* Tabs */
+.tabs{
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:10;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  margin-top:20px;
+  background:var(--paper);
+  border-bottom:1px solid var(--line);
+}
+.tabs button{
+  min-height:56px;
+  padding:8px 4px;
+  margin-bottom:-1px;
+  font:inherit;
+  font-size:14px;
+  font-weight:600;
+  line-height:1.2;
+  text-wrap:balance;
+  color:var(--muted);
+  background:none;
+  border:0;
+  border-bottom:3px solid transparent;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline-offset:-4px}
+.panel{display:grid;gap:30px;padding-top:22px}
+
+/* Stats */
+.basics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.basics .in{padding:0 4px;text-align:center;font-weight:600}
+.basics .lab,.coins .lab{text-align:center}
+.abil{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ab{
+  display:grid;
+  gap:6px;
+  min-width:0;
+  padding:10px 8px 8px;
+  justify-items:center;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+.ab b{font-size:13px;letter-spacing:.08em}
+.ab .in{padding:0 4px;text-align:center}
+.ab .mod{height:52px;font-size:26px;font-weight:700}
+.ab .score{height:40px}
+.clist{border-top:1px solid var(--line-soft)}
+.cr{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-height:48px;
+  border-bottom:1px solid var(--line-soft);
+}
+.cr .box{display:grid;place-items:center;flex:none;width:44px;height:44px}
+.cr input[type="checkbox"]{width:24px;height:24px;margin:0;accent-color:var(--accent)}
+.cr .bon{flex:none;width:60px;height:38px;padding:0 4px;text-align:center}
+.cr .nm{flex:1;min-width:0}
+.cr .tag{flex:none;width:34px;font-size:12px;color:var(--muted);text-align:right}
+
+/* Repeating rows */
+.row{
+  display:grid;
+  gap:8px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid var(--line-soft);
+}
+.list .row:first-child{border-top:1px solid var(--line-soft)}
+.row.attacks{
+  grid-template-columns:84px minmax(0,1fr) 56px;
+  grid-template-areas:"name name rm" "atk dmg dmg";
+}
+.row.equip{
+  grid-template-columns:minmax(0,1fr) 56px;
+  grid-template-areas:"name rm" "note note";
+}
+.row.items{
+  grid-template-columns:76px minmax(0,1fr) 56px;
+  grid-template-areas:"qty name rm";
+}
+.k-name{grid-area:name}
+.k-atk{grid-area:atk;text-align:center}
+.k-dmg{grid-area:dmg}
+.k-note{grid-area:note}
+.k-qty{grid-area:qty;text-align:center;font-variant-numeric:tabular-nums}
+.rm{
+  grid-area:rm;
+  width:56px;
+  height:44px;
+  font:inherit;
+  font-size:22px;
+  line-height:1;
+  color:var(--muted);
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:8px;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.rm.armed{font-size:12px;font-weight:700;color:#ffffff;background:var(--danger);border-color:var(--danger)}
+.add{
+  display:block;
+  width:100%;
+  min-height:48px;
+  margin-top:12px;
+  font:inherit;
+  font-size:15px;
+  font-weight:600;
+  color:var(--accent);
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:8px;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.add:active,.rm:active{background:var(--line-soft)}
+.rm.armed:active{background:var(--danger)}
+
+/* Currency */
+.coins{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.coins .in{padding:0 4px;text-align:center;font-variant-numeric:tabular-nums}
+.coins .lab{font-weight:600;color:var(--ink)}
+
+.note{margin:32px 0 0;font-size:12px;color:var(--muted)}
+</style>
+
+<main class="wrap">
+
+  <!-- Home -->
+  <div id="home">
+    <h1>Characters</h1>
+    <div class="chars" id="chars" hidden></div>
+    <p class="empty" id="empty" hidden>No characters yet. Tap New character to start your first sheet.</p>
+    <button type="button" class="primary" id="new">New character</button>
+    <div class="two">
+      <button type="button" class="secondary" id="import">Import file</button>
+      <button type="button" class="secondary" id="export-all" hidden>Export all</button>
+    </div>
+    <input type="file" id="file" accept=".json,application/json,text/plain" multiple hidden>
+    <p class="status" id="status-home" role="status" hidden></p>
+    <p class="note">Characters are saved in this browser on this device. Export them to keep a copy as a file or move them to another device.</p>
+  </div>
+
+  <!-- Sheet -->
+  <div id="sheet" hidden>
+    <div class="bar">
+      <button type="button" class="link" id="back">&larr; Characters</button>
+      <button type="button" class="link" id="export-one" aria-label="Export this character as a file">Export</button>
+    </div>
+    <p class="status" id="status-sheet" role="status" hidden></p>
+
+    <header class="id" id="top">
+      <label>
+        <span class="lab">Character name</span>
+        <input class="in name" type="text" data-f="name" placeholder="Name" autocomplete="off" autocapitalize="words" spellcheck="false">
+      </label>
+      <div class="pair">
+        <label>
+          <span class="lab">Class</span>
+          <input class="in" type="text" data-f="class" placeholder="Fighter" autocomplete="off" autocapitalize="words" spellcheck="false">
+        </label>
+        <label>
+          <span class="lab">Subclass</span>
+          <input class="in" type="text" data-f="subclass" placeholder="Champion" autocomplete="off" autocapitalize="words" spellcheck="false">
+        </label>
+      </div>
+      <div class="pair lvl">
+        <label>
+          <span class="lab">Species / race</span>
+          <input class="in" type="text" data-f="species" placeholder="Hill Dwarf" autocomplete="off" autocapitalize="words" spellcheck="false">
+        </label>
+        <label>
+          <span class="lab">Level</span>
+          <input class="in" type="text" inputmode="numeric" data-f="level" placeholder="1" autocomplete="off">
+        </label>
+      </div>
+      <div class="hp">
+        <label>
+          <span class="lab">Current HP</span>
+          <input class="in cur" type="text" inputmode="numeric" data-f="hpCur" placeholder="0" autocomplete="off">
+        </label>
+        <label>
+          <span class="lab">Max HP</span>
+          <input class="in" type="text" inputmode="numeric" data-f="hpMax" placeholder="0" autocomplete="off">
+        </label>
+        <label>
+          <span class="lab">Temp HP</span>
+          <input class="in" type="text" inputmode="numeric" data-f="hpTmp" placeholder="0" autocomplete="off">
+        </label>
+      </div>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Sheet sections">
+      <button type="button" role="tab" id="t-stats" data-tab="stats" aria-controls="p-stats" aria-selected="true">Stats &amp; Skills</button>
+      <button type="button" role="tab" id="t-actions" data-tab="actions" aria-controls="p-actions" aria-selected="false" tabindex="-1">Actions &amp; Features</button>
+      <button type="button" role="tab" id="t-inv" data-tab="inv" aria-controls="p-inv" aria-selected="false" tabindex="-1">Inventory</button>
+    </div>
+
+    <!-- Tab 1 -->
+    <div class="panel" id="p-stats" role="tabpanel" aria-labelledby="t-stats">
+      <section>
+        <div class="basics">
+          <label><span class="lab">Prof. bonus</span><input class="in" type="text" data-f="prof" placeholder="+2" autocomplete="off" spellcheck="false"></label>
+          <label><span class="lab">Armor class</span><input class="in" type="text" inputmode="numeric" data-f="ac" placeholder="10" autocomplete="off"></label>
+          <label><span class="lab">Initiative</span><input class="in" type="text" data-f="init" placeholder="+0" autocomplete="off" spellcheck="false"></label>
+          <label><span class="lab">Speed</span><input class="in" type="text" data-f="speed" placeholder="30" autocomplete="off" spellcheck="false"></label>
+        </div>
+      </section>
+      <section>
+        <h2>Ability scores</h2>
+        <p class="hint">Modifier on top, score below. Type your own numbers; nothing is calculated.</p>
+        <div class="abil" id="abil"></div>
+      </section>
+      <section>
+        <h2>Saving throws</h2>
+        <p class="hint">Tick the box when proficient, then type the bonus.</p>
+        <div class="clist" id="saves"></div>
+      </section>
+      <section>
+        <h2>Skills</h2>
+        <div class="clist" id="skills"></div>
+      </section>
+    </div>
+
+    <!-- Tab 2 -->
+    <div class="panel" id="p-actions" role="tabpanel" aria-labelledby="t-actions" hidden>
+      <section>
+        <h2>Attacks</h2>
+        <div class="list" data-list="attacks"></div>
+        <button type="button" class="add" data-add="attacks">+ Add attack</button>
+      </section>
+      <section>
+        <h2 id="h-actions">Actions</h2>
+        <textarea class="in" data-f="actions" aria-labelledby="h-actions" placeholder="Attack, Dash, Disengage, Dodge, Help, Hide, Ready, Search. Bonus actions and reactions can go here too." autocapitalize="sentences"></textarea>
+      </section>
+      <section>
+        <h2 id="h-features">Class features</h2>
+        <textarea class="in" data-f="features" aria-labelledby="h-features" placeholder="Second Wind: bonus action, regain 1d10 + fighter level HP. Once per short or long rest." autocapitalize="sentences"></textarea>
+      </section>
+      <section>
+        <h2 id="h-traits">Traits</h2>
+        <textarea class="in" data-f="traits" aria-labelledby="h-traits" placeholder="Species traits, background feature, feats. Darkvision 60 ft. Advantage on saves against poison." autocapitalize="sentences"></textarea>
+      </section>
+    </div>
+
+    <!-- Tab 3 -->
+    <div class="panel" id="p-inv" role="tabpanel" aria-labelledby="t-inv" hidden>
+      <section>
+        <h2>Currency</h2>
+        <div class="coins">
+          <label><span class="lab">CP</span><input class="in" type="text" inputmode="numeric" data-f="cp" placeholder="0" aria-label="Copper pieces" autocomplete="off"></label>
+          <label><span class="lab">SP</span><input class="in" type="text" inputmode="numeric" data-f="sp" placeholder="0" aria-label="Silver pieces" autocomplete="off"></label>
+          <label><span class="lab">EP</span><input class="in" type="text" inputmode="numeric" data-f="ep" placeholder="0" aria-label="Electrum pieces" autocomplete="off"></label>
+          <label><span class="lab">GP</span><input class="in" type="text" inputmode="numeric" data-f="gp" placeholder="0" aria-label="Gold pieces" autocomplete="off"></label>
+          <label><span class="lab">PP</span><input class="in" type="text" inputmode="numeric" data-f="pp" placeholder="0" aria-label="Platinum pieces" autocomplete="off"></label>
+        </div>
+      </section>
+      <section>
+        <h2>Equipment</h2>
+        <div class="list" data-list="equip"></div>
+        <button type="button" class="add" data-add="equip">+ Add equipment</button>
+      </section>
+      <section>
+        <h2>Items</h2>
+        <div class="list" data-list="items"></div>
+        <button type="button" class="add" data-add="items">+ Add item</button>
+      </section>
+    </div>
+
+    <p class="note">Changes are saved on this device as you type.</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'dnd5e-sheets-v2';
+  var OLD = 'dnd5e-sheet-v1';   /* the earlier single-sheet version */
+  var D = { order: [], chars: {} };
+  var cur = null;               /* the open character: { f, l, tab } */
+  var confirmId = null;         /* character waiting for delete confirmation */
+  var canStore = true;
+  var migrated = false;
+
+  /* ---------- storage (convenience only; every access guarded) ---------- */
+  function hasData(o) {
+    if (!o || typeof o !== 'object') return false;
+    var f = o.f && typeof o.f === 'object' ? o.f : {};
+    if (Object.keys(f).some(function (k) { return f[k]; })) return true;
+    var l = o.l && typeof o.l === 'object' ? o.l : {};
+    return Object.keys(l).some(function (name) {
+      return Array.isArray(l[name]) && l[name].some(function (r) {
+        return r && typeof r === 'object' && Object.keys(r).some(function (k) { return r[k]; });
+      });
+    });
+  }
+
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) {
+      var p = JSON.parse(raw);
+      if (p && typeof p === 'object' && Array.isArray(p.order) && p.chars && typeof p.chars === 'object') D = p;
+    } else {
+      var old = localStorage.getItem(OLD);
+      if (old) {
+        var o = JSON.parse(old);
+        if (hasData(o)) {
+          D.order.push('c1');
+          D.chars.c1 = { f: o.f || {}, l: o.l || {}, tab: typeof o.tab === 'string' ? o.tab : 'stats' };
+          migrated = true;
+        }
+      }
+    }
+  } catch (e) {}
+
+  D.order = D.order.filter(function (id) { return D.chars[id] && typeof D.chars[id] === 'object'; });
+  D.order.forEach(function (id) {
+    var c = D.chars[id];
+    if (!c.f || typeof c.f !== 'object') c.f = {};
+    if (!c.l || typeof c.l !== 'object') c.l = {};
+    if (typeof c.tab !== 'string') c.tab = 'stats';
+  });
+
+  try {
+    localStorage.setItem(KEY + '-test', '1');
+    localStorage.removeItem(KEY + '-test');
+  } catch (e) { canStore = false; }
+  if (!canStore) {
+    var notes = document.querySelectorAll('.note');
+    for (var n0 = 0; n0 < notes.length; n0++) {
+      notes[n0].textContent = 'This browser is blocking storage, so changes will be lost when you close the page.';
+    }
+  }
+
+  var timer;
+  function write() { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) {} }
+  function save() { clearTimeout(timer); timer = setTimeout(write, 250); }
+  function flush() { clearTimeout(timer); write(); }
+  window.addEventListener('pagehide', flush);
+  document.addEventListener('visibilitychange', function () { if (document.hidden) flush(); });
+  if (migrated) write();
+
+  /* ---------- repeated sheet markup: abilities, saves, skills ---------- */
+  var AB = [
+    ['str', 'STR', 'Strength'], ['dex', 'DEX', 'Dexterity'], ['con', 'CON', 'Constitution'],
+    ['int', 'INT', 'Intelligence'], ['wis', 'WIS', 'Wisdom'], ['cha', 'CHA', 'Charisma']
+  ];
+  var SK = [
+    ['Acrobatics', 'Dex'], ['Animal Handling', 'Wis'], ['Arcana', 'Int'], ['Athletics', 'Str'],
+    ['Deception', 'Cha'], ['History', 'Int'], ['Insight', 'Wis'], ['Intimidation', 'Cha'],
+    ['Investigation', 'Int'], ['Medicine', 'Wis'], ['Nature', 'Int'], ['Perception', 'Wis'],
+    ['Performance', 'Cha'], ['Persuasion', 'Cha'], ['Religion', 'Int'], ['Sleight of Hand', 'Dex'],
+    ['Stealth', 'Dex'], ['Survival', 'Wis']
+  ];
+
+  document.getElementById('abil').innerHTML = AB.map(function (a) {
+    return '<div class="ab"><b>' + a[1] + '</b>' +
+      '<input class="in mod" type="text" data-f="' + a[0] + '-mod" placeholder="+0" aria-label="' + a[2] + ' modifier" autocomplete="off" spellcheck="false">' +
+      '<input class="in score" type="text" inputmode="numeric" data-f="' + a[0] + '-score" placeholder="10" aria-label="' + a[2] + ' score" autocomplete="off">' +
+      '</div>';
+  }).join('');
+
+  function checkRow(id, name, tag) {
+    return '<div class="cr">' +
+      '<label class="box"><input type="checkbox" data-f="' + id + '-p" aria-label="' + name + ' proficient"></label>' +
+      '<input class="in bon" type="text" data-f="' + id + '" placeholder="+0" aria-label="' + name + ' bonus" autocomplete="off" spellcheck="false">' +
+      '<span class="nm">' + name + '</span>' +
+      (tag ? '<span class="tag">' + tag + '</span>' : '') +
+      '</div>';
+  }
+  document.getElementById('saves').innerHTML = AB.map(function (a) {
+    return checkRow('sv-' + a[0], a[2], '');
+  }).join('');
+  document.getElementById('skills').innerHTML = SK.map(function (s) {
+    return checkRow('sk-' + s[0].toLowerCase().replace(/ /g, '-'), s[0], s[1]);
+  }).join('');
+
+  /* ---------- textareas ---------- */
+  var native = !!(window.CSS && CSS.supports && CSS.supports('field-sizing', 'content'));
+  function grow(t) {
+    if (native) return;
+    t.style.height = 'auto';
+    t.style.height = (t.scrollHeight + 2) + 'px';
+  }
+  function growAll() {
+    if (native) return;
+    var all = document.querySelectorAll('textarea');
+    for (var i = 0; i < all.length; i++) { if (all[i].offsetParent) grow(all[i]); }
+  }
+
+  /* ---------- repeating rows (attacks, equipment, items) ---------- */
+  var L = {
+    attacks: {
+      n: 3,
+      f: [
+        ['name', 'Attack name', 'Longsword', 'words'],
+        ['atk', 'Attack bonus', '+5', ''],
+        ['dmg', 'Damage and type', '1d8+3 slashing', '']
+      ]
+    },
+    equip: {
+      n: 4,
+      f: [
+        ['name', 'Equipment', 'Chain mail', 'words'],
+        ['note', 'Notes', 'Armor class 16, worn', 'sentences']
+      ]
+    },
+    items: {
+      n: 6,
+      f: [
+        ['qty', 'Quantity', '1', 'num'],
+        ['name', 'Item', 'Rope, 50 ft', 'words']
+      ]
+    }
+  };
+
+  function hostOf(list) { return document.querySelector('[data-list="' + list + '"]'); }
+
+  function makeRow(list, data) {
+    var row = document.createElement('div');
+    row.className = 'row ' + list;
+    L[list].f.forEach(function (d) {
+      var inp = document.createElement('input');
+      inp.type = 'text';
+      inp.className = 'in k-' + d[0];
+      inp.setAttribute('data-k', d[0]);
+      inp.value = data && data[d[0]] ? data[d[0]] : '';
+      inp.placeholder = d[2];
+      inp.setAttribute('aria-label', d[1]);
+      inp.setAttribute('autocomplete', 'off');
+      inp.spellcheck = false;
+      if (d[3] === 'num') inp.setAttribute('inputmode', 'numeric');
+      inp.setAttribute('autocapitalize', d[3] === 'words' || d[3] === 'sentences' ? d[3] : 'off');
+      row.appendChild(inp);
+    });
+    var rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'rm';
+    rm.textContent = '×';
+    rm.setAttribute('aria-label', 'Remove row');
+    row.appendChild(rm);
+    return row;
+  }
+
+  /* ---------- load a character into the sheet ---------- */
+  function loadChar() {
+    var fields = document.querySelectorAll('[data-f]');
+    for (var i = 0; i < fields.length; i++) {
+      var el = fields[i], key = el.getAttribute('data-f');
+      var has = Object.prototype.hasOwnProperty.call(cur.f, key);
+      if (el.type === 'checkbox') el.checked = has && !!cur.f[key];
+      else el.value = has ? String(cur.f[key]) : '';
+    }
+    Object.keys(L).forEach(function (list) {
+      var arr = cur.l[list];
+      if (!Array.isArray(arr)) {
+        arr = [];
+        for (var n = 0; n < L[list].n; n++) arr.push({});
+      }
+      cur.l[list] = arr.map(function (x) { return x && typeof x === 'object' ? x : {}; });
+      var host = hostOf(list);
+      host.textContent = '';
+      cur.l[list].forEach(function (d) { host.appendChild(makeRow(list, d)); });
+    });
+  }
+
+  /* ---------- tabs ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  var ids = tabs.map(function (t) { return t.getAttribute('data-tab'); });
+  var hdr = document.getElementById('top');
+
+  function show(id, scroll) {
+    if (ids.indexOf(id) < 0) id = 'stats';
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('data-tab') === id;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById('p-' + t.getAttribute('data-tab')).hidden = !on;
+    });
+    if (cur) { cur.tab = id; save(); }
+    growAll();
+    if (scroll) {
+      var top = hdr.getBoundingClientRect().bottom + window.pageYOffset + 20;
+      if (window.pageYOffset > top) window.scrollTo(0, top);
+    }
+  }
+
+  tabs.forEach(function (t, n) {
+    t.addEventListener('click', function () { show(t.getAttribute('data-tab'), true); });
+    t.addEventListener('keydown', function (e) {
+      var to = -1;
+      if (e.key === 'ArrowRight') to = (n + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') to = (n + tabs.length - 1) % tabs.length;
+      if (to >= 0) {
+        e.preventDefault();
+        tabs[to].focus();
+        show(tabs[to].getAttribute('data-tab'), true);
+      }
+    });
+  });
+
+  /* ---------- views ---------- */
+  var homeEl = document.getElementById('home');
+  var sheetEl = document.getElementById('sheet');
+  var listEl = document.getElementById('chars');
+  var emptyEl = document.getElementById('empty');
+
+  function mk(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text) e.textContent = text;
+    return e;
+  }
+
+  function summary(c) {
+    var f = c.f || {};
+    var klass = [
+      f.level ? 'Level ' + String(f.level).trim() : '',
+      f.class ? String(f.class).trim() : ''
+    ].filter(Boolean).join(' ');
+    if (f.subclass && String(f.subclass).trim()) klass += (klass ? ' ' : '') + '(' + String(f.subclass).trim() + ')';
+    var species = f.species ? String(f.species).trim() : '';
+    return [species, klass].filter(Boolean).join(' · ');
+  }
+
+  function renderHome() {
+    listEl.textContent = '';
+    var any = D.order.length > 0;
+    listEl.hidden = !any;
+    emptyEl.hidden = any;
+    document.getElementById('export-all').hidden = !any;
+    D.order.forEach(function (id) {
+      var c = D.chars[id];
+      var name = c.f.name ? String(c.f.name).trim() : '';
+      var row = mk('div', 'char');
+
+      if (confirmId === id) {
+        row.className = 'char confirm';
+        var q = mk('p', 'q');
+        q.appendChild(document.createTextNode('Delete '));
+        q.appendChild(mk('b', '', name || 'this character'));
+        q.appendChild(document.createTextNode('? This cannot be undone.'));
+        var cancel = mk('button', 'cancel', 'Cancel');
+        cancel.type = 'button';
+        cancel.setAttribute('data-cancel', id);
+        var go = mk('button', 'go', 'Delete');
+        go.type = 'button';
+        go.setAttribute('data-confirm', id);
+        row.appendChild(q);
+        row.appendChild(cancel);
+        row.appendChild(go);
+      } else {
+        var open = mk('button', 'open');
+        open.type = 'button';
+        open.setAttribute('data-open', id);
+        open.appendChild(mk('span', name ? 'cn' : 'cn none', name || 'Unnamed character'));
+        var s = summary(c);
+        if (s) open.appendChild(mk('span', 'cs', s));
+        var del = mk('button', 'del', 'Delete');
+        del.type = 'button';
+        del.setAttribute('data-del', id);
+        del.setAttribute('aria-label', 'Delete ' + (name || 'unnamed character'));
+        row.appendChild(open);
+        row.appendChild(del);
+      }
+      listEl.appendChild(row);
+    });
+  }
+
+  function goHome() {
+    flush();
+    clearStatus();
+    cur = null;
+    confirmId = null;
+    sheetEl.hidden = true;
+    homeEl.hidden = false;
+    renderHome();
+    window.scrollTo(0, 0);
+  }
+
+  function openChar(id) {
+    flush();
+    clearStatus();
+    cur = D.chars[id];
+    homeEl.hidden = true;
+    sheetEl.hidden = false;
+    loadChar();
+    show(cur.tab, false);
+    window.scrollTo(0, 0);
+  }
+
+  function newChar() {
+    var id = newId();
+    D.chars[id] = { f: {}, l: {}, tab: 'stats' };
+    D.order.push(id);
+    write();
+    openChar(id);
+    var nameEl = document.querySelector('[data-f="name"]');
+    if (nameEl) nameEl.focus();
+  }
+
+  /* ---------- export / import ---------- */
+  var KNOWN = Object.create(null);
+  (function () {
+    var els = document.querySelectorAll('[data-f]');
+    for (var i = 0; i < els.length; i++) KNOWN[els[i].getAttribute('data-f')] = true;
+  })();
+  var LISTKEYS = {};
+  Object.keys(L).forEach(function (name) {
+    LISTKEYS[name] = L[name].f.map(function (d) { return d[0]; });
+  });
+
+  /* PURE:start */
+  var FORMAT = 'dnd5e-character-sheet';
+
+  /* Keep only fields this sheet knows, with plain string/boolean values. */
+  function cleanChar(src, known, lists) {
+    var out = { f: {}, l: {}, tab: 'stats' };
+    if (!src || typeof src !== 'object') return out;
+    var f = src.f && typeof src.f === 'object' ? src.f : {};
+    Object.keys(f).forEach(function (k) {
+      if (!known[k]) return;
+      var v = f[k];
+      if (typeof v === 'boolean') out.f[k] = v;
+      else if (typeof v === 'string') out.f[k] = v.slice(0, 20000);
+      else if (typeof v === 'number') out.f[k] = String(v);
+    });
+    var l = src.l && typeof src.l === 'object' ? src.l : {};
+    Object.keys(lists).forEach(function (name) {
+      if (!Array.isArray(l[name])) return;
+      out.l[name] = l[name].slice(0, 500).map(function (row) {
+        var r = {};
+        if (row && typeof row === 'object') {
+          lists[name].forEach(function (key) {
+            var v = row[key];
+            if (typeof v === 'string') r[key] = v.slice(0, 2000);
+            else if (typeof v === 'number') r[key] = String(v);
+          });
+        }
+        return r;
+      });
+    });
+    return out;
+  }
+
+  /* Returns an array of cleaned characters, or null when the text is not a character export. */
+  function parseImport(text, known, lists) {
+    var data;
+    try { data = JSON.parse(text); } catch (e) { return null; }
+    if (!data || typeof data !== 'object' || data.format !== FORMAT || !Array.isArray(data.characters)) return null;
+    return data.characters.slice(0, 200).map(function (c) { return cleanChar(c, known, lists); });
+  }
+
+  function buildExport(chars) {
+    return JSON.stringify({
+      format: FORMAT,
+      version: 1,
+      characters: chars.map(function (c) { return { f: c.f, l: c.l }; })
+    }, null, 2);
+  }
+  /* PURE:end */
+
+  function newId() {
+    return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+
+  function plural(n, word) { return n + ' ' + word + (n === 1 ? '' : 's'); }
+
+  function say(msg, bad) {
+    var el = document.getElementById(homeEl.hidden ? 'status-sheet' : 'status-home');
+    el.textContent = msg;
+    el.hidden = !msg;
+    el.className = bad ? 'status bad' : 'status';
+  }
+  function clearStatus() {
+    ['status-home', 'status-sheet'].forEach(function (id) {
+      var el = document.getElementById(id);
+      el.textContent = '';
+      el.hidden = true;
+    });
+  }
+
+  function fileName(name) {
+    var s = String(name || '').trim().replace(/[\\\/:*?"<>|\s]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+    return (s || 'character') + '-dnd5e.json';
+  }
+
+  /* The viewer's file-saving ability arrives asynchronously; null means this view cannot save files. */
+  var dl = null;
+  try {
+    if (window.claude && typeof window.claude.use === 'function') {
+      window.claude.use('downloads').then(function (d) { dl = d || null; }, function () { dl = null; });
+    }
+  } catch (e) {}
+
+  /* Android app (Capacitor): write the file to the app cache, then open the share sheet so it can be saved or sent. */
+  try {
+    var capJS = window.Capacitor;
+    if (capJS && typeof capJS.isNativePlatform === 'function' && capJS.isNativePlatform()) {
+      var capFS = capJS.registerPlugin('Filesystem');
+      var capShare = capJS.registerPlugin('Share');
+      dl = {
+        save: function (o) {
+          return capFS.writeFile({ path: o.filename, data: o.data, directory: 'CACHE', encoding: 'utf8' }).then(function (r) {
+            return capShare.share({ title: o.filename, dialogTitle: 'Save or share character', files: [r.uri] });
+          }).then(function () {}, function (err) {
+            if (err && /cancel/i.test(String(err.message || err))) {
+              var c = new Error('declined');
+              c.code = 'declined';
+              throw c;
+            }
+            throw err;
+          });
+        }
+      };
+    }
+  } catch (e) {}
+
+  function copyFallback(text) {
+    function fail() { say('This view cannot save or copy files. Open the page in a browser to export.', true); }
+    try {
+      navigator.clipboard.writeText(text).then(function () {
+        say('This view cannot save files, so the data was copied as text. Paste it into a note and save it as a .json file to import later.');
+      }, fail);
+    } catch (e) { fail(); }
+  }
+
+  function exportChars(chars, filename, what) {
+    var text = buildExport(chars);
+    if (!dl) { copyFallback(text); return; }
+    dl.save({ filename: filename, data: text }).then(function () {
+      say(what + ' saved as a file.');
+    }, function (err) {
+      var code = err && err.code;
+      if (code === 'declined') say('Export cancelled.');
+      else if (code === 'rate_limited') say('A save prompt is already open. Try again in a moment.', true);
+      else copyFallback(text);
+    });
+  }
+
+  function readFile(file) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve(String(r.result)); };
+      r.onerror = function () { reject(r.error); };
+      r.readAsText(file);
+    });
+  }
+
+  function importFiles(files) {
+    var picked = Array.prototype.slice.call(files || []);
+    if (!picked.length) return;
+    var added = 0, bad = 0;
+    Promise.all(picked.map(function (file) {
+      if (file.size > 5 * 1024 * 1024) { bad++; return null; }
+      return readFile(file).then(function (text) {
+        var chars = parseImport(text, KNOWN, LISTKEYS);
+        if (!chars) { bad++; return; }
+        chars.forEach(function (c) {
+          var id = newId();
+          D.chars[id] = c;
+          D.order.push(id);
+          added++;
+        });
+      }, function () { bad++; });
+    })).then(function () {
+      write();
+      renderHome();
+      if (added && !bad) say('Imported ' + plural(added, 'character') + '.');
+      else if (added) say('Imported ' + plural(added, 'character') + '. ' + plural(bad, 'file') + ' could not be read.', true);
+      else if (bad) say(picked.length === 1 ? 'That file is not a character export.' : 'None of those files are character exports.', true);
+      else say('That file has no characters in it.', true);
+    });
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener('input', function (e) {
+    var el = e.target;
+    if (!cur || !el || !el.getAttribute) return;
+    var f = el.getAttribute('data-f');
+    if (f) {
+      cur.f[f] = el.type === 'checkbox' ? el.checked : el.value;
+      if (el.tagName === 'TEXTAREA') grow(el);
+      save();
+      return;
+    }
+    var k = el.getAttribute('data-k');
+    if (k) {
+      var row = el.parentNode, host = row.parentNode;
+      var list = host.getAttribute('data-list');
+      var idx = Array.prototype.indexOf.call(host.children, row);
+      if (cur.l[list] && cur.l[list][idx]) { cur.l[list][idx][k] = el.value; save(); }
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button') : null;
+    if (!b) return;
+
+    /* home */
+    var openId = b.getAttribute('data-open');
+    if (openId) { openChar(openId); return; }
+
+    var delId = b.getAttribute('data-del');
+    if (delId) {
+      confirmId = delId;
+      renderHome();
+      var c1 = listEl.querySelector('[data-cancel]');
+      if (c1) c1.focus();
+      return;
+    }
+
+    var cancelId = b.getAttribute('data-cancel');
+    if (cancelId) {
+      confirmId = null;
+      renderHome();
+      var d1 = listEl.querySelector('[data-del="' + cancelId + '"]');
+      if (d1) d1.focus();
+      return;
+    }
+
+    var confId = b.getAttribute('data-confirm');
+    if (confId) {
+      var pos = D.order.indexOf(confId);
+      if (pos >= 0) D.order.splice(pos, 1);
+      delete D.chars[confId];
+      confirmId = null;
+      write();
+      renderHome();
+      return;
+    }
+
+    if (b.id === 'new') { newChar(); return; }
+    if (b.id === 'back') { goHome(); return; }
+    if (b.id === 'import') { document.getElementById('file').click(); return; }
+    if (b.id === 'export-all') {
+      var all = D.order.map(function (id) { return D.chars[id]; });
+      exportChars(all, 'dnd5e-characters.json', plural(all.length, 'character'));
+      return;
+    }
+    if (b.id === 'export-one') {
+      if (cur) exportChars([cur], fileName(cur.f.name), 'Character');
+      return;
+    }
+
+    /* sheet: repeating rows */
+    if (!cur) return;
+
+    var addList = b.getAttribute('data-add');
+    if (addList) {
+      cur.l[addList].push({});
+      var r = makeRow(addList, {});
+      hostOf(addList).appendChild(r);
+      r.querySelector('input').focus();
+      save();
+      return;
+    }
+
+    if (b.classList.contains('rm')) {
+      var row = b.parentNode, host = row.parentNode;
+      var list = host.getAttribute('data-list');
+      var idx = Array.prototype.indexOf.call(host.children, row);
+      var d = cur.l[list][idx] || {};
+      var empty = !Object.keys(d).some(function (key) { return d[key]; });
+      if (empty || b.classList.contains('armed')) {
+        cur.l[list].splice(idx, 1);
+        row.parentNode.removeChild(row);
+        save();
+      } else {
+        b.classList.add('armed');
+        b.textContent = 'Delete';
+        setTimeout(function () {
+          b.classList.remove('armed');
+          b.textContent = '×';
+        }, 3000);
+      }
+    }
+  });
+
+  document.getElementById('file').addEventListener('change', function (e) {
+    var picked = Array.prototype.slice.call(e.target.files || []);
+    e.target.value = '';
+    importFiles(picked);
+  });
+
+  renderHome();
+})();
+</script>
+
+</body></html>

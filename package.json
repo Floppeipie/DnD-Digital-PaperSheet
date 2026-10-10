@@ -1,0 +1,20 @@
+{
+  "name": "dnd5e-character-sheet",
+  "version": "1.0.0",
+  "private": true,
+  "description": "D&D 5e character sheet packaged as an Android app with Capacitor",
+  "scripts": {
+    "android:add": "cap add android",
+    "sync": "cap sync android",
+    "apk": "cap sync android && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/filesystem": "^7.0.0",
+    "@capacitor/share": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}
